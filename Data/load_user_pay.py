@@ -8,7 +8,7 @@ from array import array
 import time
 
 if __name__ == '__main__':
-    user_pay = open("user_view.txt")
+    user_pay = open("user_pay.txt")
 
     pay_buf = array("d")
 
@@ -32,4 +32,4 @@ if __name__ == '__main__':
     pay_np_array = np.frombuffer(pay_buf,dtype=np.float).reshape(-1,3)
 
     print(pay_np_array.shape)
-    pay_np_array.tofile('user_view.bin')
+    pay_np_array.tofile('user_pay.bin')
