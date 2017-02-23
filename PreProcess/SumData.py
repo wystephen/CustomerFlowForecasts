@@ -27,8 +27,8 @@ if __name__ == '__main__':
     shop_total = np.zeros([len(shop_info_lines),int(total_days+1)])
 
     for i in range(user_pay.shape[0]):
-        shop_total[user_pay[i,1]-1,int((user_pay[i,2]-first_time)/sec2dayratio)] +=1
-        
+        shop_total[int(user_pay[i,1]-1),int((user_pay[i,2]-first_time)/sec2dayratio)]  +=1# shop_total[user_pay[i,1]-1,int((user_pay[i,2]-first_time)/sec2dayratio)] + 1
+
     shop_total.tofile("../data/tmp_shop_total.bin")
 
     plt.figure(1)
