@@ -14,14 +14,22 @@ if __name__ == '__main__':
 
     t_X = X[:,1:]
     t_X = t_X / np.sum(t_X,1).reshape(2000,1)
-    kmeans = KMeans(n_clusters=8,random_state=0).fit(t_X)
+    types_num = 6
+    kmeans = KMeans(n_clusters=types_num,random_state=0).fit(t_X)
     cluster_result = kmeans.labels_
-    subclass_total_num = np.zeros([8])
+    subclass_total_num = np.zeros([types_num])
     for i in range(len(cluster_result)):
         subclass_total_num[cluster_result[i]] +=1
+    subclass_total_num.sort()
+
+    shop_lable = np.zeros([2000])
+    shop_lable = cluster_result
+
+    shop_lable.tofile("../Data/tmp_shop_lable.bin")
+
 
     plt.figure(2)
-    plt.plot(subclass_total_num,'*r')
+    plt.plot(subclass_total_num,'*r-')
 
     plt.figure(1)
     plt.grid(True)
