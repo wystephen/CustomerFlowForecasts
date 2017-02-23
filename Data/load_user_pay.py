@@ -22,7 +22,8 @@ if __name__ == '__main__':
         pay_buf.append(float(line.split(',')[1]))
         # print(line.split(',')[2])
         # print(time.mktime(time.strptime(line.split(',')[2].split('\n')[0],'%Y-%m-%d %H:%M:%S')))
-        pay_buf.append(float(time.mktime(time.strptime(line.split(',')[2].split('\n')[0],'%Y-%m-%d %H:%M:%S'))))
+        pay_buf.append(float(time.mktime(time.strptime(line.split(',')[2].split('\n')[0],
+                                                       '%Y-%m-%d %H:%M:%S'))))
 
 
 
