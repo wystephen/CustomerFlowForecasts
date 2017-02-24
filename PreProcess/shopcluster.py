@@ -7,16 +7,19 @@ import scipy as sp
 import matplotlib.pyplot as plt
 
 from sklearn.cluster import KMeans
-
+from sklearn.cluster import dbscan
 if __name__ == '__main__':
     X = np.fromfile("../Data/tmp_shop_total.bin",dtype=float)
     X=X.reshape(2000,-1)
 
-    t_X = X[:,1:]
+    t_X = X[:,-101:]
     #t_X = t_X / np.sum(t_X,1).reshape(2000,1)
-    types_num = 3
+    types_num = 100
     kmeans = KMeans(n_clusters=types_num,random_state=0).fit(t_X)
     cluster_result = kmeans.labels_
+    Dbscan = dbscan(t_X)
+    print(Dbscan)
+
     subclass_total_num = np.zeros([types_num])
     for i in range(len(cluster_result)):
         subclass_total_num[cluster_result[i]] +=1

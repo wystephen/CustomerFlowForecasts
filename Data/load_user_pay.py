@@ -34,3 +34,6 @@ if __name__ == '__main__':
 
     print(pay_np_array.shape)
     pay_np_array.tofile('user_pay.bin')
+
+    plt.figure(1)
+

@@ -15,14 +15,14 @@ from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.svm import SVR
 from sklearn.cross_validation import cross_val_score
 
-from sklearn.neural_network.rbm import
+from sklearn.neural_network import MLPRegressor
 
 if __name__ == '__main__':
     start_time = time.localtime()
     shop_lable = np.fromfile("../Data/tmp_shop_lable.bin", dtype=int)
     src_data = np.fromfile("../Data/tmp_shop_total.bin", dtype=float)
     src_data = src_data.reshape(2000, -1)
-    src_data = src_data[:,-100:]
+    src_data = src_data[:, 100:]
     print(shop_lable)
     types_num = np.zeros(int(np.max(shop_lable) + 1))
     for i in range(shop_lable.shape[0]):
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     index_list = list()
     Model_list = list()
 
-    time_step = 28  # number of input data.
+    time_step = 35  # number of input data.
     result_step = 14  # number of output data
 
     for i in range(np.max(shop_lable) + 1):
@@ -47,6 +47,11 @@ if __name__ == '__main__':
                                 int(types_num[i]),
                                 int(result_step)]))
         index_list.append(0)
+
+    src_data = src_data.astype('float')
+    data_mean = np.mean(src_data)
+    data_std = np.std(src_data)
+    src_data = (src_data-data_mean)/data_std
 
     for i in range(src_data.shape[0]):
         the_type = shop_lable[i]
@@ -64,11 +69,11 @@ if __name__ == '__main__':
         #     reg = RandomForestRegressor()
         # else:
         #     reg = SVR()
-        reg =
+        reg = MLPRegressor(hidden_layer_sizes=(time_step * 2, time_step,))
 
         reg.fit(X_list[tindex],
-                Y_list[tindex].reshape(-1))
-        print(cross_val_score(reg, X_list[tindex], Y_list[tindex].reshape(-1)))
+                Y_list[tindex])
+        print(cross_val_score(reg, X_list[tindex], Y_list[tindex]))
         Model_list.append(reg)
 
     estimate_result = np.zeros([2000, 15])
@@ -86,9 +91,23 @@ if __name__ == '__main__':
     else:
         for i in range(2000):
             print(i)
+            label = shop_lable[i]
+            input_data = src_data[i, -time_step:]
+            estimate_result[i, 0] = i + 1
+            estimate_result[i, 1:] = Model_list[label].predict(input_data)
+
+    estimate_result[:, 1:] = data_mean+( estimate_result[:, 1:] * data_std)
+    estimate_result = np.abs(estimate_result)
+    src_data = src_data * data_std + data_mean
+
+    for i in range(estimate_result.shape[0]):
+        estimate_result[i, 1:] = estimate_result[i, 1:] / np.mean(estimate_result[i, 1:]) *np.mean(src_data[i, -21:])
 
     estimate_result.tofile("../Data/Test_result.bin")
     estimate_result = estimate_result.astype('int')
 
-    np.savetxt("test" + str(start_time)+ "'.csv",
+    np.savetxt("test" + str(start_time) + "'.csv",
                estimate_result, fmt='%d', delimiter=',')
+    plt.figure(1)
+    plt.imshow(estimate_result[:, 1:])
+    plt.show()
