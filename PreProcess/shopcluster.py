@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     t_X = X[:,1:]
     t_X = t_X / np.sum(t_X,1).reshape(2000,1)
-    types_num = 6
+    types_num = 50
     kmeans = KMeans(n_clusters=types_num,random_state=0).fit(t_X)
     cluster_result = kmeans.labels_
     subclass_total_num = np.zeros([types_num])
@@ -33,5 +33,5 @@ if __name__ == '__main__':
 
     plt.figure(1)
     plt.grid(True)
-    plt.plot(kmeans.labels_)
+    plt.plot(kmeans.labels_,'+r')
     plt.show()
