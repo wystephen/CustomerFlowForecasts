@@ -31,4 +31,6 @@ if __name__ == '__main__':
                                    , 1]))
         index_list.append(0)
 
+    for i in range()
+
 
