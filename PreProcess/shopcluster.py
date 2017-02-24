@@ -13,8 +13,8 @@ if __name__ == '__main__':
     X=X.reshape(2000,-1)
 
     t_X = X[:,1:]
-    t_X = t_X / np.sum(t_X,1).reshape(2000,1)
-    types_num = 50
+    #t_X = t_X / np.sum(t_X,1).reshape(2000,1)
+    types_num = 3
     kmeans = KMeans(n_clusters=types_num,random_state=0).fit(t_X)
     cluster_result = kmeans.labels_
     subclass_total_num = np.zeros([types_num])

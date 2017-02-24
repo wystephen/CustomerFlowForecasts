@@ -15,10 +15,14 @@ from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.svm import SVR
 from sklearn.cross_validation import cross_val_score
 
+from sklearn.neural_network.rbm import
+
 if __name__ == '__main__':
+    start_time = time.localtime()
     shop_lable = np.fromfile("../Data/tmp_shop_lable.bin", dtype=int)
     src_data = np.fromfile("../Data/tmp_shop_total.bin", dtype=float)
     src_data = src_data.reshape(2000, -1)
+    src_data = src_data[:,-100:]
     print(shop_lable)
     types_num = np.zeros(int(np.max(shop_lable) + 1))
     for i in range(shop_lable.shape[0]):
@@ -30,7 +34,7 @@ if __name__ == '__main__':
     Model_list = list()
 
     time_step = 28  # number of input data.
-    result_step = 1  # number of output data
+    result_step = 14  # number of output data
 
     for i in range(np.max(shop_lable) + 1):
         print(types_num[i])
@@ -55,27 +59,36 @@ if __name__ == '__main__':
     for tindex in range(len(X_list)):
         Y_list[tindex].reshape(-1)
         print(X_list[tindex].shape, " ", Y_list[tindex].shape)
-        reg = GradientBoostingRegressor()
-        # reg = RandomForestRegressor()
-        # reg = SVR()
+        # reg = GradientBoostingRegressor()
+        # if(types_num[tindex]<np.mean(types_num)/2.0):
+        #     reg = RandomForestRegressor()
+        # else:
+        #     reg = SVR()
+        reg =
+
         reg.fit(X_list[tindex],
                 Y_list[tindex].reshape(-1))
         print(cross_val_score(reg, X_list[tindex], Y_list[tindex].reshape(-1)))
         Model_list.append(reg)
 
     estimate_result = np.zeros([2000, 15])
-    for i in range(2000):
-        print(i)
-        label = shop_lable[i]
-        input_data = src_data[i, -time_step:].shape(-1)
-        estimate_result[i, 0] = i + 1
-        for j in range(14):
-            estimate_result[i, j + 1] = Model_list[label].predict(input_data).reshape(-1)
-            input_data[:time_step - 1] = input_data[1:].reshape(-1, 1)
-            input_data[-1] = estimate_result[i, j]
+    if result_step == 1:
+
+        for i in range(2000):
+            print(i)
+            label = shop_lable[i]
+            input_data = src_data[i, -time_step:]
+            estimate_result[i, 0] = i + 1
+            for j in range(14):
+                estimate_result[i, j + 1] = Model_list[label].predict(input_data).reshape(-1)
+                input_data[:time_step - 1] = input_data[1:]
+                input_data[-1] = estimate_result[i, j]
+    else:
+        for i in range(2000):
+            print(i)
 
     estimate_result.tofile("../Data/Test_result.bin")
     estimate_result = estimate_result.astype('int')
 
-    np.savetxt("test" + str(time.localtime()) + "'.csv",
+    np.savetxt("test" + str(start_time)+ "'.csv",
                estimate_result, fmt='%d', delimiter=',')
