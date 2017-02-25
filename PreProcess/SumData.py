@@ -37,6 +37,7 @@ if __name__ == '__main__':
                                                      i, 2] - first_time) / sec2dayratio)] += 1  # shop_total[user_pay[i,1]-1,int((user_pay[i,2]-first_time)/sec2dayratio)] + 1
 
     shop_total.tofile("../data/tmp_shop_total.bin")
+    np.savetxt("shop_total.txt",shop_total[:,1:])
 
     plt.figure(1)
     plt.grid(True)

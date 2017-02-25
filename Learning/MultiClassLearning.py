@@ -74,6 +74,7 @@ if __name__ == '__main__':
         reg.fit(X_list[tindex],
                 Y_list[tindex])
         print(cross_val_score(reg, X_list[tindex], Y_list[tindex]))
+
         Model_list.append(reg)
 
     estimate_result = np.zeros([2000, 15])
