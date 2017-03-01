@@ -21,7 +21,7 @@ if __name__ == '__main__':
     print("shop all :", len(shop_info_lines))
 
     sec2dayratio = 24.0 * 3600.0
-    total_days = (np.max(user_pay[:, 2]) - np.min(user_pay[:, 2])) / sec2dayratio
+    total_days = float(np.max(user_pay[:, 2]) - np.min(user_pay[:, 2])) / sec2dayratio
     # first_time = np.min(user_pay[:,2])
     first_time = float(time.mktime(
         time.strptime("2015-07-01 00:00:00",
@@ -33,10 +33,10 @@ if __name__ == '__main__':
     shop_total = np.zeros([len(shop_info_lines), int(total_days + 1)])
 
     for i in range(user_pay.shape[0]):
-        shop_total[int(user_pay[i, 1] - 1), int((user_pay[
-                                                     i, 2] - first_time) / sec2dayratio)] += 1  # shop_total[user_pay[i,1]-1,int((user_pay[i,2]-first_time)/sec2dayratio)] + 1
+        shop_total[int(user_pay[i, 1] - 1), int((float(user_pay[
+                                                     i, 2]) - first_time) / sec2dayratio)] += 1  # shop_total[user_pay[i,1]-1,int((user_pay[i,2]-first_time)/sec2dayratio)] + 1
 
-    shop_total.tofile("../data/tmp_shop_total.bin")
+    shop_total.tofile("../Data/tmp_shop_total.bin")
     np.savetxt("shop_total.txt",shop_total[:,1:])
 
     plt.figure(1)
